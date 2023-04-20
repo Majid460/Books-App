@@ -7,11 +7,16 @@ function longest<Type extends {length: number}>(a: Type, b: Type) {
 }
 
 type unidentified = String | number;
+let ab = 'ahsh';
+
 function a(p: Bear) {
   console.log(p.name);
 }
 interface animal {
   name: String;
+}
+type a = {
+  i=String
 }
 interface Bear extends animal {
   honey: boolean;

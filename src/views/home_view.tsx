@@ -15,12 +15,23 @@ import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import CustomAuthor from '../components/CustomAuthor';
 import FavoriteBook from '../components/FavoriteBook';
-import {BooksData, data} from '../Constants';
+import {BooksData, books, data} from '../Constants';
 import {NavProps} from '../navigation/navigationInterfaces';
+import {getMovies} from '../data/api';
+import {useDispatch, useSelector} from 'react-redux';
+import {getMoviesData} from '../redux/reducer';
+import store from '../redux/store';
+import {RootState} from '../redux/combineReducers';
 function HomeView({navigation}: NavProps) {
   const [loading, setLoading] = React.useState(false);
-
+  const [book, setBooks] = React.useState<books[]>();
+  const [refreshing, setRefreshing] = React.useState(false);
+  const dispatch = useDispatch();
+  const {movies} = useSelector((state: RootState) => state.movies);
   React.useEffect(() => {
+    dispatch(getMoviesData({}));
+    console.log(movies);
+    setBooks(BooksData);
     setTimeout(() => {
       setLoading(true);
     }, 5000);
@@ -121,7 +132,13 @@ function HomeView({navigation}: NavProps) {
               <CustomAuthor
                 name={item.fullName}
                 avatar={{uri: item.avatarUrl}}
-                onTap={() => {}}
+                onTap={() => {
+                  const filterData = BooksData.filter(
+                    v => v.author == item.fullName,
+                  );
+                  console.log(filterData);
+                  setBooks(filterData);
+                }}
               />
             )}
             keyExtractor={item => item.id}
@@ -154,8 +171,16 @@ function HomeView({navigation}: NavProps) {
           <FlatList
             horizontal={false}
             scrollEnabled={true}
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              setTimeout(() => {
+                setRefreshing(false);
+                setBooks(BooksData);
+              }, 3000);
+            }}
             showsVerticalScrollIndicator={true}
-            data={BooksData}
+            data={book}
             numColumns={2}
             renderItem={({item}) => (
               <Box marginBottom={4} marginRight={4}>

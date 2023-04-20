@@ -13,7 +13,7 @@ const data = [
   },
   {
     id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    fullName: 'Viktor Mayer-Schönberger',
+    fullName: 'Viktor Mayer-Schönberger and Kenneth Cukier',
     avatarUrl:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSt_BEjpwMw0vY9uRl9PQGOpi2pEkyKDQxO3g&usqp=CAU',
   },
@@ -36,12 +36,19 @@ const data = [
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1xKAtbFIA_jBGKQ5_RtkLQ1cVWVrdx9ssrg&usqp=CAU',
   },
 ];
-const BooksData = [
+export interface books {
+  id: string;
+  title: String;
+  url: string;
+  author: String;
+  about: String;
+}
+const BooksData: books[] = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb2827',
     title: 'The Hundred-Page Machine',
     url: 'https://m.media-amazon.com/images/I/411CpImAaAL._SX404_BO1,204,203,200_.jpg',
-    author: 'By Andriy Burkov',
+    author: 'Andriy Burkov',
     about: ` The breadth of topics the book covers is amazing for just 100 pages (plus few bonus pages!). 
      
      ◉. Burkov does not hesitate to go into the math equations: that is one thing that short books usually drop.
@@ -52,7 +59,7 @@ const BooksData = [
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb2826',
     title: 'Too Big to Ignore',
     url: 'https://m.media-amazon.com/images/I/51ElcLjqTSL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg',
-    author: 'By Phil Simon',
+    author: 'Phil Simon',
     about: `Too Big to Ignore, recognized technology expert and award-winning author Phil Simon explores an 
       unassailably important trend: 
        ◉.Big Data, the massive amounts, new types, and multifaceted sources of information streaming at us faster than ever. Never before have we seen data with the volume, velocity, and variety of today.
@@ -64,7 +71,7 @@ const BooksData = [
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb2825',
     title: 'Big Data',
     url: 'https://m.media-amazon.com/images/I/416qX5-iCVL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg',
-    author: 'By Viktor Mayer-Schönberger and Kenneth Cukier',
+    author: 'Viktor Mayer-Schönberger and Kenneth Cukier',
     about: `Big Data is the first major book about this earthshaking subject, with two leading experts explaining what big data is, how it will change our lives, and what we can do to protect ourselves from its hazards.
       An optimistic and practical look at the Big Data revolution — just the thing to get your head around the big changes already underway and the bigger changes to come.`,
   },
@@ -72,7 +79,7 @@ const BooksData = [
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb2824',
     title: 'Artificial Intelligence',
     url: 'https://m.media-amazon.com/images/I/417MT+-a7WL._SY344_BO1,204,203,200_.jpg',
-    author: 'By Melanie Mitchell',
+    author: 'Melanie Mitchell',
     about: `In Artificial Intelligence, Mitchell turns to the most urgent questions concerning AI today:
       ◉. How intelligent―really―are the best AI programs? How do they work? What can they actually do, and when do they fail? How humanlike do we expect them to become, and how soon do we need to worry about them surpassing us? Along the way, she introduces the dominant models of modern AI and machine learning, describing cutting- edge AI programs, their human inventors, and the historical lines of thought underpinning recent achievements.
       ◉. She meets with fellow experts such as Douglas Hofstadter, the cognitive scientist and Pulitzer Prize–winning author of the modern classic Gödel, Escher, Bach, who explains why he is “terrified” about the future of AI.She explores the profound disconnect between the hype and the actual achievements in AI, providing a clear sense of what the field has accomplished and how much further it has to go.`,
@@ -81,7 +88,7 @@ const BooksData = [
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb2823',
     title: 'The Quick Python Book',
     url: 'https://m.media-amazon.com/images/I/41yCI3StseL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg',
-    author: 'By Naomi Ceder',
+    author: 'Naomi Ceder',
     about: `The Quick Python Book, Third Edition is a comprehensive guide to the Python language by a Python authority, Naomi Ceder.
       ◉. With the personal touch of a skilled teacher, she beautifully balances details of the language with the insights and advice you need to handle any task.
       ◉. Extensive, relevant examples and learn- by - doing exercises help you master each important concept the first time through.
@@ -91,7 +98,7 @@ const BooksData = [
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb2822',
     title: 'Developing Analytic Talent',
     url: 'https://m.media-amazon.com/images/I/41jhK57RasL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg',
-    author: 'By Vincent Granville',
+    author: 'Vincent Granville',
     about: `This book is a must, whether you are looking to become a data scientist or to hire one.
     ◉. Explains the finer points of data science, the required skills, and how to acquire them, including analytical recipes, standard rules, source code, and a dictionary of terms.
     ◉.Shows what companies are looking for and how the growing importance of big data has increased the demand for data scientists.
