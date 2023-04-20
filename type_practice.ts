@@ -16,8 +16,8 @@ interface animal {
   name: String;
 }
 type a = {
-  i=String
-}
+  i: String;
+};
 interface Bear extends animal {
   honey: boolean;
 }

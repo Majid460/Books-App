@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Stack} from 'native-base';
 import LoginView from '../../views/login_view';
 import SignUpView from '../../views/register_view';
-import RootStackParamList from '../roots';
+import RootStackParamList from '../routes';
 import HomeView from '../../views/home_view';
 import BookDetailView from '../../views/book_detail_view';
 

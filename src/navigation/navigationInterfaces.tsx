@@ -1,6 +1,6 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import RootStackParamList from './roots';
+import RootStackParamList from './routes';
 
 type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 type NavProps = {

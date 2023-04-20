@@ -17,10 +17,8 @@ import CustomAuthor from '../components/CustomAuthor';
 import FavoriteBook from '../components/FavoriteBook';
 import {BooksData, books, data} from '../Constants';
 import {NavProps} from '../navigation/navigationInterfaces';
-import {getMovies} from '../data/api';
 import {useDispatch, useSelector} from 'react-redux';
 import {getMoviesData} from '../redux/reducer';
-import store from '../redux/store';
 import {RootState} from '../redux/combineReducers';
 function HomeView({navigation}: NavProps) {
   const [loading, setLoading] = React.useState(false);
@@ -30,7 +28,6 @@ function HomeView({navigation}: NavProps) {
   const {movies} = useSelector((state: RootState) => state.movies);
   React.useEffect(() => {
     dispatch(getMoviesData({}));
-    console.log(movies);
     setBooks(BooksData);
     setTimeout(() => {
       setLoading(true);
