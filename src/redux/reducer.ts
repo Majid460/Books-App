@@ -4,12 +4,13 @@ export const movieReducer = createSlice({
   name: 'reducer',
   initialState: {movies: []},
   reducers: {
-    setMoviesData: (state, action) => {
+    setBooksData: (state, action) => {
       state.movies = action.payload;
     },
-    getMoviesData: (state, action) => {},
+    getBooksData: (state, action) => {},
+    saveBooksData: (state, action) => {},
   },
 });
 
-export const {setMoviesData, getMoviesData} = movieReducer.actions;
+export const {setBooksData, getBooksData, saveBooksData} = movieReducer.actions;
 export default movieReducer.reducer;

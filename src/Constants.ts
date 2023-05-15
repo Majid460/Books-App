@@ -106,4 +106,35 @@ const BooksData: books[] = [
     ◉.Case studies explore how data science is used on Wall Street, in botnet detection, for online advertising, and in many other business-critical situations`,
   },
 ];
-export {data, BooksData};
+
+export interface authorsInterface {
+  value: string;
+  label: string;
+}
+const Authors: authorsInterface[] = [
+  {
+    value: 'Andriy Burkov',
+    label: 'Andriy Burkov',
+  },
+  {
+    value: 'Phil Simon',
+    label: 'Phil Simon',
+  },
+  {
+    value: 'Viktor Mayer-Schönberger and Kenneth Cukier',
+    label: 'Viktor Mayer-Schönberger and Kenneth Cukier',
+  },
+  {
+    value: 'Melanie Mitchell',
+    label: 'Melanie Mitchell',
+  },
+  {
+    value: 'Naomi Ceder',
+    label: 'Naomi Ceder',
+  },
+  {
+    value: 'Vincent Granville',
+    label: 'Vincent Granville',
+  },
+];
+export {data, BooksData, Authors};

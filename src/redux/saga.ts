@@ -1,12 +1,19 @@
 import {put, takeLatest, call} from 'redux-saga/effects';
 import * as actions from './reducer';
-import {getMovies, moviesResponse} from '../data/api';
+import {addBooks} from '../data/api';
+import {
+  booksAddModel,
+  booksResponse,
+} from '../data/ModelInterfaces/ModelInterfaces';
+import {AnyAction} from '@reduxjs/toolkit';
 
-function* getMovieList() {
+function* setBooks(action: AnyAction) {
+  console.log('Action Payload::' + JSON.stringify(action.payload));
   try {
-    const response: moviesResponse = yield call(getMovies);
+    const response: booksResponse = yield call(addBooks, action.payload);
     if (response) {
-      yield put(actions.setMoviesData(response.movies));
+      console.log(response);
+      // yield put(actions.);
     }
   } catch (e) {
     console.log(e);
@@ -14,5 +21,5 @@ function* getMovieList() {
 }
 
 export default function* () {
-  yield takeLatest(actions.getMoviesData, getMovieList);
+  yield takeLatest(actions.saveBooksData, setBooks);
 }

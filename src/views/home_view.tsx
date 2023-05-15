@@ -18,16 +18,25 @@ import FavoriteBook from '../components/FavoriteBook';
 import {BooksData, books, data} from '../Constants';
 import {NavProps} from '../navigation/navigationInterfaces';
 import {useDispatch, useSelector} from 'react-redux';
-import {getMoviesData} from '../redux/reducer';
 import {RootState} from '../redux/combineReducers';
+import {saveBooksData} from '../redux/reducer';
+import {BottomBar} from '../components/BottomBar/BottomBar';
+import {Routes} from '../navigation/Routes/routes_names';
 function HomeView({navigation}: NavProps) {
   const [loading, setLoading] = React.useState(false);
   const [book, setBooks] = React.useState<books[]>();
   const [refreshing, setRefreshing] = React.useState(false);
   const dispatch = useDispatch();
-  const {movies} = useSelector((state: RootState) => state.movies);
+  //const {movies} = useSelector((state: RootState) => state);
   React.useEffect(() => {
-    dispatch(getMoviesData({}));
+    dispatch(
+      saveBooksData({
+        url: 'https://m.media-amazon.com/images/I/411CpImAaAL._SX404_BO1,204,203,200_.jpg',
+        about: 'Book is about Machine Learning',
+        title: 'Machine Learning A',
+        author: 'Author A',
+      }),
+    );
     setBooks(BooksData);
     setTimeout(() => {
       setLoading(true);
@@ -184,7 +193,7 @@ function HomeView({navigation}: NavProps) {
                 <FavoriteBook
                   title={item.title}
                   onTap={() => {
-                    navigation.navigate('Book', {
+                    navigation.navigate(Routes.BOOK, {
                       url: item.url,
                       title: item.title,
                       detail: item.about,
@@ -199,6 +208,9 @@ function HomeView({navigation}: NavProps) {
             )}
             keyExtractor={item => item.id}
           />
+        </Box>
+        <Box height={81} width="100%" safeAreaBottom borderRadius={10}>
+          <BottomBar navigation={navigation} />
         </Box>
       </Box>
     </>

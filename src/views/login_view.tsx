@@ -11,13 +11,13 @@ import {
   Button,
 } from 'native-base';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {longest, a} from '../../type_practice';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import CustomInput from '../components/CustomInput';
 import {
   NavProps,
   ScreenNavigationProp,
 } from '../navigation/navigationInterfaces';
+import {Routes} from '../navigation/Routes/routes_names';
 
 interface childProps {
   title: any;
@@ -68,7 +68,7 @@ function Item(props: childProps) {
   React.useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      props.navigation.navigate('Home');
+      props.navigation.navigate(Routes.HOME);
     }, 2000);
   }, [loading]);
   return (
@@ -102,7 +102,7 @@ function Item(props: childProps) {
               borderRadius={10}
               marginBottom={5}
               onPress={() => {
-                props.navigation.navigate('SignUp');
+                props.navigation.navigate(Routes.SIGNUP);
               }}
               variant="solid">
               Don't have Account ?

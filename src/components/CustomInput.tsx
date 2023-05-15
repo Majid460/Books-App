@@ -14,10 +14,18 @@ function CustomInput(props: Props) {
       size={props.size}
       type={props.type}
       variant="rounded"
+      onChangeText={props.onChangeText}
       onChange={props.onChange}
       InputLeftElement={props.InputLeftElement}
       placeholder={props.placeholder}
       InputRightElement={props.InputRightElement}
+      focusOutlineColor="blue.700"
+      borderColor="gray.600"
+      _focus={props._focus}
+      backgroundColor={props.backgroundColor}
+      multiline={props.multiline}
+      borderRadius={props.borderRadius}
+      onContentSizeChange={props.onContentSizeChange}
     />
   );
 }

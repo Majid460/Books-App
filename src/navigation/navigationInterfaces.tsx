@@ -1,18 +1,49 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import RootStackParamList from './routes';
+import RootStackParamList from './Routes/routes';
+import {Routes} from './Routes/routes_names';
 
-type ScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
+//Login
+type ScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  Routes.LOGIN
+>;
 type NavProps = {
   navigation: ScreenNavigationProp;
 };
-type ScreenRouteProp = RouteProp<RootStackParamList, 'Login'>;
+//Add New Book
+type NewBookScreenNavProp = StackNavigationProp<
+  RootStackParamList,
+  Routes.ADD_BOOK
+>;
+type NewBookNavProps = {
+  navigation: NewBookScreenNavProp;
+};
+type ScreenRouteProp = RouteProp<RootStackParamList, Routes.LOGIN>;
 //Book
-type BookScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Book'>;
-type BookScreenRoute = RouteProp<RootStackParamList, 'Book'>;
+type BookScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  Routes.BOOK
+>;
+type BookScreenRoute = RouteProp<RootStackParamList, Routes.BOOK>;
 type BookNavProps = {
   navigation: BookScreenNavigationProp;
   route: BookScreenRoute;
 };
-
-export type {ScreenNavigationProp, NavProps, BookNavProps};
+//Add New Author
+type AuthorScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  Routes.ADD_AUTHOR
+>;
+type AuthorScreenRoute = RouteProp<RootStackParamList, Routes.ADD_AUTHOR>;
+type AuthorNavProps = {
+  navigation: AuthorScreenNavigationProp;
+  route: AuthorScreenRoute;
+};
+export type {
+  ScreenNavigationProp,
+  NavProps,
+  BookNavProps,
+  NewBookNavProps,
+  AuthorNavProps,
+};
