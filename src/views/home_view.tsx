@@ -29,16 +29,19 @@ function HomeView({navigation}: NavProps) {
   const [selectedItem, setSelectedItem] = React.useState('');
   const [selectedAuthor, setSelectedAuthor] = React.useState('');
   const dispatch = useDispatch();
-  //const {movies} = useSelector((state: RootState) => state);
+  const authorsData = useSelector(
+    (state: RootState) => state.reducer.authorData,
+  );
+
   React.useEffect(() => {
-    dispatch(
-      saveBooksData({
-        url: 'https://m.media-amazon.com/images/I/411CpImAaAL._SX404_BO1,204,203,200_.jpg',
-        about: 'Book is about Machine Learning',
-        title: 'Machine Learning A',
-        author: 'Author A',
-      }),
-    );
+    // dispatch(
+    //   saveBooksData({
+    //     url: 'https://m.media-amazon.com/images/I/411CpImAaAL._SX404_BO1,204,203,200_.jpg',
+    //     about: 'Book is about Machine Learning',
+    //     title: 'Machine Learning A',
+    //     author: 'Author A',
+    //   }),
+    // );
     setBooks(BooksData);
     setTimeout(() => {
       setLoading(true);
@@ -135,25 +138,25 @@ function HomeView({navigation}: NavProps) {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={true}
-            data={data}
+            data={authorsData}
             renderItem={({item}) => (
               <CustomAuthor
-                name={item.fullName}
-                avatar={{uri: item.avatarUrl}}
+                name={item.name}
+                avatar={{uri: item.pic}}
                 selected={selectedItem}
-                itemId={item.id}
+                itemId={item._id}
                 onTap={() => {
-                  setSelectedItem(item.id);
-
-                  setSelectedAuthor(item.fullName);
+                  console.log(item._id);
+                  setSelectedItem(item._id);
+                  setSelectedAuthor(item.name);
                   const filterData = BooksData.filter(
-                    v => v.author == item.fullName,
+                    v => v.author == item.name,
                   );
                   setBooks(filterData);
                 }}
               />
             )}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item._id}
           />
         </Box>
         <Box

@@ -15,3 +15,8 @@ export type AuthorAddModel = {
   name: string;
   pic: string;
 };
+export type AuthorDataResponse = {
+  name: string;
+  pic: string;
+  _id: string;
+};

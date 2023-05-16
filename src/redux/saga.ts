@@ -1,6 +1,6 @@
 import {put, takeLatest, call} from 'redux-saga/effects';
 import * as actions from './reducer';
-import {AddAuthorApi, addBooks} from '../data/api';
+import {AddAuthorApi, GetAuthorsApi, addBooks} from '../data/api';
 import {booksResponse} from '../data/ModelInterfaces/ModelInterfaces';
 import {AnyAction} from '@reduxjs/toolkit';
 
@@ -28,8 +28,20 @@ function* AddAuthor(action: AnyAction): any {
     yield put(actions.setAuthorAddedStatus('Error'));
   }
 }
-
+function* getAuthors(): any {
+  try {
+    const response = yield call(GetAuthorsApi);
+    if (response) {
+      yield put(actions.getSuccessAuthor(response));
+    } else {
+      yield put(actions.getErrorAuthor('Error'));
+    }
+  } catch (e) {
+    yield put(actions.getErrorAuthor('Error'));
+  }
+}
 export default function* () {
   yield takeLatest(actions.saveBooksData, setBooks);
   yield takeLatest(actions.addAuthor, AddAuthor);
+  yield takeLatest(actions.getAuthor, getAuthors);
 }

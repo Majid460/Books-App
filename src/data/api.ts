@@ -42,3 +42,18 @@ export const AddAuthorApi = async (data: AuthorAddModel) => {
     console.log(e);
   }
 };
+//Get All Author
+export const GetAuthorsApi = async () => {
+  try {
+    const response = await fetch(baseUrls.LocalUrl + 'getAllAuthors', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+
+    return response.json();
+  } catch (e) {
+    console.log(e);
+  }
+};

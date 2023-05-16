@@ -16,12 +16,23 @@ import Space from '../components/Space/AddSpace';
 import {Authors} from '../Constants';
 import {NewBookNavProps} from '../navigation/navigationInterfaces';
 import {Routes} from '../navigation/Routes/routes_names';
+import {useDispatch, useSelector} from 'react-redux';
+import {getAuthor} from '../redux/reducer';
+import {RootState} from '../redux/combineReducers';
 function AddBookView({navigation}: NewBookNavProps) {
   const [height, setHeight] = React.useState(100);
   const [addUrl, setAddUrl] = React.useState(true);
   const [showDrop, setShowDrop] = React.useState(false);
   const [selectedAuthor, setSelectedAuthor] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const dispatch = useDispatch();
+  const authorsData = useSelector(
+    (state: RootState) => state.reducer.authorData,
+  );
+
+  React.useEffect(() => {
+    dispatch(getAuthor({}));
+  }, []);
   return (
     <Box
       height="100%"
@@ -135,12 +146,12 @@ function AddBookView({navigation}: NewBookNavProps) {
                   ),
                 }}
                 mt="1">
-                {Authors.map(e => (
+                {authorsData.map(e => (
                   <Select.Item
                     borderRadius={10}
-                    key={e.value}
-                    label={e.label}
-                    value={e.value}
+                    key={e._id}
+                    label={e.name}
+                    value={e.name}
                   />
                 ))}
               </Select>
