@@ -11,3 +11,7 @@ export type booksAddModel = {
   title: string;
   author: string;
 };
+export type AuthorAddModel = {
+  name: string;
+  pic: string;
+};

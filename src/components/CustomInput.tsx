@@ -21,6 +21,7 @@ function CustomInput(props: Props) {
       InputRightElement={props.InputRightElement}
       focusOutlineColor="blue.700"
       borderColor="gray.600"
+      placeholderTextColor={props.placeholderTextColor}
       _focus={props._focus}
       backgroundColor={props.backgroundColor}
       multiline={props.multiline}

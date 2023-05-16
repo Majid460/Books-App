@@ -1,3 +1,5 @@
+const defaultAuthorPic =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiwVJV38db9e6c6qLcHw53zMFT9j81nnv13Go8rzlOSA&s';
 const data = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
@@ -137,4 +139,4 @@ const Authors: authorsInterface[] = [
     label: 'Vincent Granville',
   },
 ];
-export {data, BooksData, Authors};
+export {data, BooksData, Authors, defaultAuthorPic};

@@ -26,6 +26,8 @@ function HomeView({navigation}: NavProps) {
   const [loading, setLoading] = React.useState(false);
   const [book, setBooks] = React.useState<books[]>();
   const [refreshing, setRefreshing] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState('');
+  const [selectedAuthor, setSelectedAuthor] = React.useState('');
   const dispatch = useDispatch();
   //const {movies} = useSelector((state: RootState) => state);
   React.useEffect(() => {
@@ -138,11 +140,15 @@ function HomeView({navigation}: NavProps) {
               <CustomAuthor
                 name={item.fullName}
                 avatar={{uri: item.avatarUrl}}
+                selected={selectedItem}
+                itemId={item.id}
                 onTap={() => {
+                  setSelectedItem(item.id);
+
+                  setSelectedAuthor(item.fullName);
                   const filterData = BooksData.filter(
                     v => v.author == item.fullName,
                   );
-                  console.log(filterData);
                   setBooks(filterData);
                 }}
               />
@@ -163,7 +169,18 @@ function HomeView({navigation}: NavProps) {
             shimmerColors={['#FFBDBA', '#FF9C6D', '#FFBDBA']}
             LinearGradient={LinearGradient}
             shimmerStyle={[{borderRadius: 40}]}>
-            <Text fontSize={20}>Favorite Books</Text>
+            <Text fontSize={20}>
+              {selectedItem.length == 0 ? (
+                'Favorite Books'
+              ) : (
+                <Text fontSize={20} fontWeight="bold" color="black">
+                  Books by{' '}
+                  <Text fontSize={18} fontWeight="normal">
+                    {selectedAuthor}
+                  </Text>
+                </Text>
+              )}
+            </Text>
           </ShimmerPlaceHolder>
         </Box>
         <Box
@@ -179,6 +196,8 @@ function HomeView({navigation}: NavProps) {
             scrollEnabled={true}
             refreshing={refreshing}
             onRefresh={() => {
+              setSelectedItem('');
+              setSelectedAuthor('');
               setRefreshing(true);
               setTimeout(() => {
                 setRefreshing(false);

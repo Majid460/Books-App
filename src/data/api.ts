@@ -1,10 +1,10 @@
 import {baseUrls} from '../NetworkConfig/config';
-import {booksAddModel, booksResponse} from './ModelInterfaces/ModelInterfaces';
+import {AuthorAddModel, booksAddModel} from './ModelInterfaces/ModelInterfaces';
 
 export const addBooks = async (data: booksAddModel) => {
   try {
     console.log('Books data in Api Calling::' + JSON.stringify(data));
-    const response = await fetch(baseUrls.LocalUrl + 'AddBook', {
+    await fetch(baseUrls.LocalUrl + 'AddBook', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -22,6 +22,22 @@ export const addBooks = async (data: booksAddModel) => {
       .catch(e => {
         console.log('Error :: ' + e);
       });
+  } catch (e) {
+    console.log(e);
+  }
+};
+//Add Author
+export const AddAuthorApi = async (data: AuthorAddModel) => {
+  try {
+    const response = await fetch(baseUrls.LocalUrl + 'AddAuthor', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return response;
   } catch (e) {
     console.log(e);
   }

@@ -7,6 +7,8 @@ interface Author {
   name: String;
   avatar: ImageURISource;
   onTap: () => void;
+  selected: string;
+  itemId: string;
 }
 
 function CustomAuthor(props: Author) {
@@ -34,7 +36,9 @@ function CustomAuthor(props: Author) {
         paddingTop={1}
         borderRadius={10}
         borderWidth={1}
-        backgroundColor="pink.100"
+        backgroundColor={
+          props.selected == props.itemId ? 'blue.300' : 'pink.100'
+        }
         alignItems="center">
         <Button
           variant="ghost"

@@ -8,9 +8,6 @@ import {
   Spacer,
   Select,
   Fab,
-  Center,
-  FormControl,
-  Input,
 } from 'native-base';
 import React from 'react';
 import CustomInput from '../components/CustomInput';
@@ -24,9 +21,7 @@ function AddBookView({navigation}: NewBookNavProps) {
   const [addUrl, setAddUrl] = React.useState(true);
   const [showDrop, setShowDrop] = React.useState(false);
   const [selectedAuthor, setSelectedAuthor] = React.useState('');
-  const [searchAuthor, setSearchedAuthor] = React.useState('');
-  var text: string = '';
-
+  const [loading, setLoading] = React.useState(false);
   return (
     <Box
       height="100%"
@@ -103,7 +98,7 @@ function AddBookView({navigation}: NewBookNavProps) {
               alignSelf="center"
               right="0"
               onPress={() => {}}
-              bottom={8}
+              bottom={20}
               padding={1}
               onPressIn={() => {
                 setShowDrop(false);
@@ -139,44 +134,6 @@ function AddBookView({navigation}: NewBookNavProps) {
                     <Icon as={<Icons name="done" />} size={5} color="black" />
                   ),
                 }}
-                _actionSheetBody={{
-                  ListHeaderComponent: (
-                    <VStack padding={5}>
-                      <CustomInput
-                        key={'A2335'}
-                        placeholder="Search Author"
-                        h={10}
-                        borderRadius={10}
-                        size={23}
-                        value={searchAuthor}
-                        _focus={{bg: 'gray.100'}}
-                        InputLeftElement={
-                          <Icon
-                            as={<Icons name="search" size={20} />}
-                            size={5}
-                            ml="2"
-                            color="blue.500"
-                          />
-                        }
-                        onChangeText={e => {
-                          text = e;
-                        }}
-                      />
-                      <Space key={'A23336'} size={1} />
-                      <Button
-                        key={'A2334'}
-                        variant="ghost"
-                        alignSelf="center"
-                        width={150}
-                        onPress={() => navigation.navigate(Routes.ADD_AUTHOR)}
-                        height={50}>
-                        <Text fontSize={16} color="blue.700">
-                          Add Author
-                        </Text>
-                      </Button>
-                    </VStack>
-                  ),
-                }}
                 mt="1">
                 {Authors.map(e => (
                   <Select.Item
@@ -188,6 +145,17 @@ function AddBookView({navigation}: NewBookNavProps) {
                 ))}
               </Select>
             </Box>
+            <Button
+              key={'A2334'}
+              variant="ghost"
+              alignSelf="center"
+              width={150}
+              onPress={() => navigation.navigate(Routes.ADD_AUTHOR)}
+              height={50}>
+              <Text fontSize={16} color="blue.700">
+                Add Author
+              </Text>
+            </Button>
           </VStack>
         )}
 
@@ -282,12 +250,26 @@ function AddBookView({navigation}: NewBookNavProps) {
         </HStack>
         <Space size={10} />
         <Button
-          borderRadius={10}
-          paddingLeft={5}
-          paddingRight={5}
           paddingTop={2}
           paddingBottom={2}
-          variant="solid">
+          borderRadius={10}
+          paddingLeft={10}
+          paddingRight={10}
+          variant="solid"
+          onPress={() => setLoading(true)}
+          isLoading={loading}
+          _loading={{
+            bg: 'amber.400',
+            opacity: 1,
+            _text: {
+              fontSize: 16,
+              color: 'darkBlue.900',
+            },
+          }}
+          _spinner={{
+            color: 'blue',
+          }}
+          isLoadingText="Adding Book..">
           <Text fontSize={16} color="white">
             Save Book
           </Text>
