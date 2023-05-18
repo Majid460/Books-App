@@ -12,18 +12,22 @@ import NavigationWrapper from './src/navigation/screen_nav';
 import {NativeBaseProvider} from 'native-base';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
+import {UserRealmContext} from './src/data/LocalDataStorage';
 function App() {
   return <AppWrapper />;
 }
 const AppWrapper = () => {
+  const {RealmProvider} = UserRealmContext;
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <NativeBaseProvider>
-          <NavigationWrapper />
-        </NativeBaseProvider>
-      </NavigationContainer>
-    </Provider>
+    <RealmProvider>
+      <Provider store={store}>
+        <NavigationContainer>
+          <NativeBaseProvider>
+            <NavigationWrapper />
+          </NativeBaseProvider>
+        </NavigationContainer>
+      </Provider>
+    </RealmProvider>
   );
 };
 

@@ -8,31 +8,83 @@ import {
   Spacer,
   Select,
   Fab,
+  useToast,
+  ScrollView,
 } from 'native-base';
 import React from 'react';
 import CustomInput from '../components/CustomInput';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import Space from '../components/Space/AddSpace';
-import {Authors} from '../Constants';
 import {NewBookNavProps} from '../navigation/navigationInterfaces';
 import {Routes} from '../navigation/Routes/routes_names';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAuthor} from '../redux/reducer';
+import {getAuthor, saveBooksData, setBookAddedStatus} from '../redux/reducer';
 import {RootState} from '../redux/combineReducers';
+import CustomHookForToast from '../custom_hooks/CustomHooks';
+import {Dimensions} from 'react-native';
 function AddBookView({navigation}: NewBookNavProps) {
   const [height, setHeight] = React.useState(100);
   const [addUrl, setAddUrl] = React.useState(true);
   const [showDrop, setShowDrop] = React.useState(false);
   const [selectedAuthor, setSelectedAuthor] = React.useState('');
+  const [title, setTitle] = React.useState('');
+  const [about, setAbout] = React.useState('');
+  const [bookPic, setBookPic] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const dispatch = useDispatch();
+  const toast = useToast();
   const authorsData = useSelector(
     (state: RootState) => state.reducer.authorData,
   );
-
+  const booksAddedStatus = useSelector(
+    (state: RootState) => state.reducer.booksAddedStatus,
+  );
   React.useEffect(() => {
+    dispatch(setBookAddedStatus({booksAddedStatus: ''}));
     dispatch(getAuthor({}));
   }, []);
+  React.useEffect(() => {
+    if (loading) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+    }
+  }, [loading]);
+  //Custom Hook for Toast
+  CustomHookForToast(booksAddedStatus, title);
+  const validate: () => boolean = function (): boolean {
+    let status: boolean = false;
+    if (
+      title.length > 0 &&
+      about.length > 0 &&
+      selectedAuthor.length > 0 &&
+      bookPic.length > 0
+    ) {
+      status = true;
+    } else {
+      status = false;
+    }
+    return status;
+  };
+
+  const AddBook = () => {
+    dispatch(setBookAddedStatus({booksAddedStatus: ''}));
+    if (validate() == true) {
+      setLoading(true);
+      dispatch(
+        saveBooksData({
+          url: bookPic,
+          about: about,
+          title: title,
+          author: selectedAuthor,
+        }),
+      );
+    } else {
+      toast.show({description: 'Please fill all fields'});
+    }
+  };
+  let deviceHeight = Dimensions.get('window').height;
+  console.log('Height::' + deviceHeight);
   return (
     <Box
       height="100%"
@@ -41,7 +93,7 @@ function AddBookView({navigation}: NewBookNavProps) {
       alignContent="center"
       overflow="hidden"
       backgroundColor="coolGray.300"
-      padding="10%">
+      padding="5%">
       <VStack space={2}>
         <Text color="black" fontSize={18}>
           Book Title
@@ -61,7 +113,7 @@ function AddBookView({navigation}: NewBookNavProps) {
             />
           }
           onChangeText={v => {
-            console.log(v);
+            setTitle(v);
           }}
         />
         <Text color="black" fontSize={18}>
@@ -177,6 +229,7 @@ function AddBookView({navigation}: NewBookNavProps) {
           placeholder="Description"
           h={Math.max(41, height)}
           size={23}
+          maxH={deviceHeight > 800 ? 150 : 100}
           _focus={{bg: 'gray.100'}}
           multiline={true}
           borderRadius={10}
@@ -194,7 +247,7 @@ function AddBookView({navigation}: NewBookNavProps) {
             />
           }
           onChangeText={v => {
-            console.log(v);
+            setAbout(v);
           }}
         />
         <Text color="black" fontSize={18}>
@@ -217,11 +270,11 @@ function AddBookView({navigation}: NewBookNavProps) {
               />
             }
             onChangeText={v => {
-              console.log(v);
+              setBookPic(v);
             }}
           />
         ) : null}
-        <Spacer />
+        <Space size={2} />
         <HStack
           space={3}
           alignContent="center"
@@ -259,7 +312,7 @@ function AddBookView({navigation}: NewBookNavProps) {
             </Text>
           </Button>
         </HStack>
-        <Space size={10} />
+        <Space size={2} />
         <Button
           paddingTop={2}
           paddingBottom={2}
@@ -267,7 +320,8 @@ function AddBookView({navigation}: NewBookNavProps) {
           paddingLeft={10}
           paddingRight={10}
           variant="solid"
-          onPress={() => setLoading(true)}
+          disabled={validate() == true ? false : true}
+          onPress={() => AddBook()}
           isLoading={loading}
           _loading={{
             bg: 'amber.400',
@@ -280,6 +334,9 @@ function AddBookView({navigation}: NewBookNavProps) {
           _spinner={{
             color: 'blue',
           }}
+          backgroundColor={
+            validate() == true ? (!loading ? 'pink.500' : null) : 'green.500'
+          }
           isLoadingText="Adding Book..">
           <Text fontSize={16} color="white">
             Save Book

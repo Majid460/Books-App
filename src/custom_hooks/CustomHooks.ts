@@ -10,7 +10,7 @@ function CustomHookForToast(dependency: string, Name: string) {
       });
     } else if (dependency == 'Error') {
       toast.show({
-        description: 'Error in adding Author',
+        description: 'Error in adding',
       });
     }
   }, [dependency]);

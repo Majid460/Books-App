@@ -20,3 +20,44 @@ export type AuthorDataResponse = {
   pic: string;
   _id: string;
 };
+export type RegisterUserModel = {
+  name: string;
+  email: string;
+  password: string;
+  pic: string;
+};
+export type LoginRequestModel = {
+  email: string;
+  password: string;
+};
+export type LoginSuccessModel = {
+  message: string;
+  data: LoginSubData;
+  error: string;
+  statusCode: number;
+};
+export type LoginSubData = {
+  id: string;
+  email: string;
+  token: string;
+  name: string;
+  pic: string;
+};
+const initialUserSub: LoginSubData = {
+  id: '',
+  email: '',
+  token: '',
+  name: '',
+  pic: '',
+};
+export const initiateUserLogin: LoginSuccessModel = {
+  message: '',
+  data: initialUserSub,
+  error: '',
+  statusCode: 0,
+};
+export interface RegisterResponseModel {
+  message: string;
+  statusCode: number;
+  data: RegisterUserModel;
+}

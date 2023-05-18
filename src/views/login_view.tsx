@@ -9,6 +9,7 @@ import {
   Icon,
   Pressable,
   Button,
+  Slide,
 } from 'native-base';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Icons from 'react-native-vector-icons/MaterialIcons';
@@ -18,19 +19,126 @@ import {
   ScreenNavigationProp,
 } from '../navigation/navigationInterfaces';
 import {Routes} from '../navigation/Routes/routes_names';
-
+import {useDispatch, useSelector} from 'react-redux';
+import {loginUser} from '../redux/reducer';
+import * as actions from '../redux/reducer';
+import {RootState} from '../redux/combineReducers';
+import {UserRealmContext} from '../data/LocalDataStorage';
+import UserModel from '../data/LocalDataStorage/Realm_Models/UserModel';
+import {UpdateMode} from 'realm';
 interface childProps {
   title: any;
   subTitle: any;
   detail: any;
   navigation: ScreenNavigationProp;
+  email: (v: string) => void;
+  password: (v: string) => void;
+  loading: boolean;
+  setLoading: (v: boolean) => void;
+  loginButton: () => void;
 }
 
 const LoginView = ({navigation}: NavProps) => {
   const isDarkMode = useColorScheme() === 'dark';
-  //const navigation = useNavigation<ScreenNavigationProp>();
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const [isOpenTop, setIsOpenTop] = React.useState(false);
+  const [slideText, setSlideText] = React.useState('');
+  const {useRealm} = UserRealmContext;
+  const realm = useRealm();
+  const loginStatus = useSelector(
+    (state: RootState) => state.reducer.loginError,
+  );
+  const LoginSuccessData = useSelector(
+    (state: RootState) => state.reducer.loginSuccess,
+  );
+  const handleAddUser = (
+    email: string,
+    token: string,
+    id: string,
+    name: string,
+    pic: string,
+  ) => {
+    realm.write(() => {
+      realm.create(
+        UserModel,
+        {email: email, token: token, userId: id, name: name, pic: pic},
+        UpdateMode.Modified,
+      );
+    });
+  };
+  React.useEffect(() => {
+    actions.initialState.loginError = '';
+  }, []);
+  React.useEffect(() => {
+    if (
+      LoginSuccessData.message == 'User Login Successfully' &&
+      loginStatus != 'Error'
+    ) {
+      handleAddUser(
+        LoginSuccessData.data.email,
+        LoginSuccessData.data.token,
+        LoginSuccessData.data.id,
+        LoginSuccessData.data.name,
+        LoginSuccessData.data.pic,
+      );
+      setIsOpenTop(true);
+      setSlideText(loginStatus);
+      navigation.navigate(Routes.HOME, {
+        id: LoginSuccessData.data.id,
+        name: LoginSuccessData.data.name,
+        email: LoginSuccessData.data.email,
+        pic: LoginSuccessData.data.pic,
+      });
+    } else if (loginStatus == 'Error') {
+      setIsOpenTop(true);
+      setSlideText('Error in making Request');
+    } else if (
+      LoginSuccessData.message == "Password doesn't match" &&
+      loginStatus != 'Error'
+    ) {
+      setIsOpenTop(true);
+      setSlideText(LoginSuccessData.message);
+    } else if (
+      LoginSuccessData.message == "User doesn't exist" &&
+      loginStatus != 'Error'
+    ) {
+      setIsOpenTop(true);
+      setSlideText(LoginSuccessData.message);
+    } else {
+      setIsOpenTop(false);
+    }
+  }, [loginStatus, LoginSuccessData]);
+
+  React.useEffect(() => {
+    if (isOpenTop) {
+      setTimeout(() => {
+        setIsOpenTop(false);
+      }, 5000);
+    }
+  }, [isOpenTop]);
+  React.useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, [loading]);
+  const dispatch = useDispatch();
+  const handleLogin = () => {
+    if (email.length > 0 && password.length > 0) {
+      dispatch(
+        loginUser({
+          email: email,
+          password: password,
+        }),
+      );
+    } else {
+      setSlideText('Please Fill all fields');
+      setIsOpenTop(true);
+    }
   };
 
   return (
@@ -40,6 +148,25 @@ const LoginView = ({navigation}: NavProps) => {
       justifyContent="center"
       backgroundColor="darkBlue.900"
       alignSelf="center">
+      <Slide
+        in={isOpenTop}
+        duration={1000}
+        placement="top"
+        marginLeft={3}
+        marginTop={5}
+        marginRight={3}>
+        <Box
+          p="40px"
+          _text={{
+            color: 'white',
+            fontSize: 18,
+          }}
+          mt="4"
+          bg="teal.500"
+          rounded="md">
+          {slideText}
+        </Box>
+      </Slide>
       <Box
         maxH="100%"
         alignItems="center"
@@ -55,6 +182,19 @@ const LoginView = ({navigation}: NavProps) => {
             "Bengal (also called Bangalore) is the center of India's high-tech industry. The city is also known for its parks and nightlife."
           }
           navigation={navigation}
+          email={v => {
+            setEmail(v);
+          }}
+          password={v => {
+            setPassword(v);
+          }}
+          loading={loading}
+          setLoading={v => {
+            setLoading(v);
+          }}
+          loginButton={() => {
+            handleLogin();
+          }}
         />
       </Box>
     </Box>
@@ -64,13 +204,7 @@ export default LoginView;
 
 function Item(props: childProps) {
   const [show, setShow] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  React.useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-      props.navigation.navigate(Routes.HOME);
-    }, 2000);
-  }, [loading]);
+
   return (
     <Box
       maxW="90%"
@@ -134,6 +268,8 @@ function Item(props: childProps) {
               placeholder="Email"
               h={10}
               size={23}
+              borderRadius={10}
+              autoCapitalize="none"
               InputLeftElement={
                 <Icon
                   as={<Icons name="email" size={20} />}
@@ -142,14 +278,14 @@ function Item(props: childProps) {
                   color="blue.500"
                 />
               }
-              onChange={v => {
-                console.log(v);
-              }}
+              onChangeText={props.email}
             />
             <CustomInput
               placeholder="Password"
               h={10}
               size={23}
+              borderRadius={10}
+              autoCapitalize="none"
               type={show ? 'text' : 'password'}
               InputLeftElement={
                 <Icon
@@ -159,9 +295,7 @@ function Item(props: childProps) {
                   color="blue.500"
                 />
               }
-              onChange={v => {
-                console.log(v);
-              }}
+              onChangeText={props.password}
               InputRightElement={
                 <Pressable onPress={() => setShow(!show)}>
                   <Icon
@@ -178,8 +312,11 @@ function Item(props: childProps) {
               borderRadius={10}
               paddingLeft={10}
               paddingRight={10}
-              onPress={() => setLoading(true)}
-              isLoading={loading}
+              onPress={() => {
+                props.loginButton();
+                props.setLoading(true);
+              }}
+              isLoading={props.loading}
               _loading={{
                 bg: 'amber.400',
                 opacity: 1,

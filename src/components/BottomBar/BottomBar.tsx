@@ -10,9 +10,9 @@ import {
   Fab,
 } from 'native-base';
 import Icons from 'react-native-vector-icons/MaterialIcons';
-import {NavProps} from '../../navigation/navigationInterfaces';
+import {HomeNavProps, NavProps} from '../../navigation/navigationInterfaces';
 import {Routes} from '../../navigation/Routes/routes_names';
-export function BottomBar({navigation}: NavProps) {
+export function BottomBar({navigation, route}: HomeNavProps) {
   const [selected, setSelected] = React.useState(1);
   return (
     <Box flex={1} bg="white" width="90%" maxW="90%" alignSelf="center">

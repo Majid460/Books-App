@@ -14,6 +14,8 @@ function CustomInput(props: Props) {
       size={props.size}
       type={props.type}
       variant="rounded"
+      maxH={props.maxH}
+      verticalAlign="middle"
       onChangeText={props.onChangeText}
       onChange={props.onChange}
       InputLeftElement={props.InputLeftElement}
@@ -27,6 +29,7 @@ function CustomInput(props: Props) {
       multiline={props.multiline}
       borderRadius={props.borderRadius}
       onContentSizeChange={props.onContentSizeChange}
+      autoCapitalize={props.autoCapitalize}
     />
   );
 }

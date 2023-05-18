@@ -10,19 +10,30 @@ import {
   IconButton,
 } from 'native-base';
 import React from 'react';
+import {useIsFocused} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 import CustomAuthor from '../components/CustomAuthor';
 import FavoriteBook from '../components/FavoriteBook';
-import {BooksData, books, data} from '../Constants';
-import {NavProps} from '../navigation/navigationInterfaces';
+import {books} from '../Constants';
+import {HomeNavProps} from '../navigation/navigationInterfaces';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../redux/combineReducers';
-import {saveBooksData} from '../redux/reducer';
+import {getAuthor, getBooksData} from '../redux/reducer';
 import {BottomBar} from '../components/BottomBar/BottomBar';
 import {Routes} from '../navigation/Routes/routes_names';
-function HomeView({navigation}: NavProps) {
+import {UserRealmContext} from '../data/LocalDataStorage';
+import UserModel from '../data/LocalDataStorage/Realm_Models/UserModel';
+function HomeView({navigation, route}: HomeNavProps) {
+  let id = route.params.id;
+  let name = route.params.name;
+  let pic = route.params.pic;
+  let email = route.params.email;
+  const {useObject} = UserRealmContext;
+  const realm = useObject(UserModel, id);
+
+  const isFocused = useIsFocused();
   const [loading, setLoading] = React.useState(false);
   const [book, setBooks] = React.useState<books[]>();
   const [refreshing, setRefreshing] = React.useState(false);
@@ -32,21 +43,24 @@ function HomeView({navigation}: NavProps) {
   const authorsData = useSelector(
     (state: RootState) => state.reducer.authorData,
   );
-
+  const booksData = useSelector(
+    (state: RootState) => state.reducer.booksSuccessData,
+  );
+  const getData = () => {
+    dispatch(getBooksData({}));
+    dispatch(getAuthor({}));
+  };
   React.useEffect(() => {
-    // dispatch(
-    //   saveBooksData({
-    //     url: 'https://m.media-amazon.com/images/I/411CpImAaAL._SX404_BO1,204,203,200_.jpg',
-    //     about: 'Book is about Machine Learning',
-    //     title: 'Machine Learning A',
-    //     author: 'Author A',
-    //   }),
-    // );
-    setBooks(BooksData);
-    setTimeout(() => {
+    setBooks(booksData);
+    if (book?.length != 0) {
       setLoading(true);
-    }, 5000);
-  }, []);
+    }
+  }, [booksData]);
+  React.useEffect(() => {
+    if (isFocused && booksData.length == 0 && authorsData.length == 0) {
+      getData();
+    }
+  }, [isFocused, booksData, authorsData]);
   return (
     <>
       <StatusBar backgroundColor="darkBlue.800" barStyle="light-content" />
@@ -76,7 +90,7 @@ function HomeView({navigation}: NavProps) {
               <Avatar
                 size="md"
                 source={{
-                  uri: 'https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+                  uri: pic,
                 }}></Avatar>
             </ShimmerPlaceHolder>
             <Box paddingLeft={1} paddingRight={7} width={40}>
@@ -95,7 +109,7 @@ function HomeView({navigation}: NavProps) {
                     fontSize={16}
                     fontWeight="bold"
                     overflow="hidden">
-                    Jhon De
+                    {name}
                   </Text>
                 </ShimmerPlaceHolder>
               </VStack>
@@ -146,12 +160,9 @@ function HomeView({navigation}: NavProps) {
                 selected={selectedItem}
                 itemId={item._id}
                 onTap={() => {
-                  console.log(item._id);
                   setSelectedItem(item._id);
                   setSelectedAuthor(item.name);
-                  const filterData = BooksData.filter(
-                    v => v.author == item.name,
-                  );
+                  const filterData = book?.filter(v => v.author == item.name);
                   setBooks(filterData);
                 }}
               />
@@ -199,12 +210,12 @@ function HomeView({navigation}: NavProps) {
             scrollEnabled={true}
             refreshing={refreshing}
             onRefresh={() => {
+              getData();
               setSelectedItem('');
               setSelectedAuthor('');
               setRefreshing(true);
               setTimeout(() => {
                 setRefreshing(false);
-                setBooks(BooksData);
               }, 3000);
             }}
             showsVerticalScrollIndicator={true}
@@ -232,7 +243,7 @@ function HomeView({navigation}: NavProps) {
           />
         </Box>
         <Box height={81} width="100%" safeAreaBottom borderRadius={10}>
-          <BottomBar navigation={navigation} />
+          <BottomBar navigation={navigation} route={route} />
         </Box>
       </Box>
     </>

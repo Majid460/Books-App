@@ -20,6 +20,16 @@ type NewBookNavProps = {
   navigation: NewBookScreenNavProp;
 };
 type ScreenRouteProp = RouteProp<RootStackParamList, Routes.LOGIN>;
+//Home
+type HomeScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  Routes.HOME
+>;
+type HomeScreenRoute = RouteProp<RootStackParamList, Routes.HOME>;
+type HomeNavProps = {
+  navigation: HomeScreenNavigationProp;
+  route: HomeScreenRoute;
+};
 //Book
 type BookScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -46,4 +56,5 @@ export type {
   BookNavProps,
   NewBookNavProps,
   AuthorNavProps,
+  HomeNavProps,
 };
