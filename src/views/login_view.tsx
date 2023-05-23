@@ -10,6 +10,7 @@ import {
   Pressable,
   Button,
   Slide,
+  FormControl,
 } from 'native-base';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Icons from 'react-native-vector-icons/MaterialIcons';
@@ -26,6 +27,8 @@ import {RootState} from '../redux/combineReducers';
 import {UserRealmContext} from '../data/LocalDataStorage';
 import UserModel from '../data/LocalDataStorage/Realm_Models/UserModel';
 import {UpdateMode} from 'realm';
+import ShowSlide from '../components/Slide/slide';
+import {emailValidator} from '../utils/utils';
 interface childProps {
   title: any;
   subTitle: any;
@@ -36,6 +39,8 @@ interface childProps {
   loading: boolean;
   setLoading: (v: boolean) => void;
   loginButton: () => void;
+  emailValidate: boolean;
+  setEmailValidate: (v: boolean) => void;
 }
 
 const LoginView = ({navigation}: NavProps) => {
@@ -48,8 +53,10 @@ const LoginView = ({navigation}: NavProps) => {
   const [loading, setLoading] = React.useState(false);
   const [isOpenTop, setIsOpenTop] = React.useState(false);
   const [slideText, setSlideText] = React.useState('');
-  const {useRealm} = UserRealmContext;
+  const [emailValidate, setEmailValidator] = React.useState(false);
+  const {useRealm, useQuery} = UserRealmContext;
   const realm = useRealm();
+  const myUserData = useQuery(UserModel);
   const loginStatus = useSelector(
     (state: RootState) => state.reducer.loginError,
   );
@@ -72,7 +79,22 @@ const LoginView = ({navigation}: NavProps) => {
     });
   };
   React.useEffect(() => {
+    console.log('In Realm Delete');
+    myUserData.map(user => {
+      realm.write(() => {
+        realm.delete(user);
+      });
+    });
+  }, []);
+  React.useEffect(() => {
+    myUserData.map(user => {
+      realm.write(() => {
+        realm.delete(user);
+      });
+    });
+
     actions.initialState.loginError = '';
+    actions.initialState.loginSuccess.message = '';
   }, []);
   React.useEffect(() => {
     if (
@@ -148,25 +170,7 @@ const LoginView = ({navigation}: NavProps) => {
       justifyContent="center"
       backgroundColor="darkBlue.900"
       alignSelf="center">
-      <Slide
-        in={isOpenTop}
-        duration={1000}
-        placement="top"
-        marginLeft={3}
-        marginTop={5}
-        marginRight={3}>
-        <Box
-          p="40px"
-          _text={{
-            color: 'white',
-            fontSize: 18,
-          }}
-          mt="4"
-          bg="teal.500"
-          rounded="md">
-          {slideText}
-        </Box>
-      </Slide>
+      <ShowSlide isOpenTop={isOpenTop} slideText={slideText} />
       <Box
         maxH="100%"
         alignItems="center"
@@ -183,7 +187,15 @@ const LoginView = ({navigation}: NavProps) => {
           }
           navigation={navigation}
           email={v => {
-            setEmail(v);
+            if (emailValidator(v)) {
+              setEmail(v);
+              setEmailValidator(false);
+            } else {
+              setEmailValidator(true);
+            }
+            if (v == '') {
+              setEmailValidator(false);
+            }
           }}
           password={v => {
             setPassword(v);
@@ -194,6 +206,10 @@ const LoginView = ({navigation}: NavProps) => {
           }}
           loginButton={() => {
             handleLogin();
+          }}
+          emailValidate={emailValidate}
+          setEmailValidate={v => {
+            setEmailValidator(v);
           }}
         />
       </Box>
@@ -264,22 +280,41 @@ function Item(props: childProps) {
         </Stack>
         <Box alignItems="center" marginTop={5}>
           <Stack space={4} w="100%" alignItems="center">
-            <CustomInput
-              placeholder="Email"
-              h={10}
-              size={23}
-              borderRadius={10}
-              autoCapitalize="none"
-              InputLeftElement={
-                <Icon
-                  as={<Icons name="email" size={20} />}
-                  size={5}
-                  ml="2"
-                  color="blue.500"
-                />
-              }
-              onChangeText={props.email}
-            />
+            <FormControl
+              isInvalid={props.emailValidate}
+              w="100%"
+              maxW="100%"
+              alignItems="center"
+              alignSelf="center">
+              <CustomInput
+                placeholder="Email"
+                h={10}
+                size={23}
+                borderRadius={10}
+                autoCapitalize="none"
+                InputLeftElement={
+                  <Icon
+                    as={<Icons name="email" size={20} />}
+                    size={5}
+                    ml="2"
+                    color="blue.500"
+                  />
+                }
+                onChangeText={props.email}
+              />
+              <FormControl.ErrorMessage
+                alignSelf="flex-start"
+                leftIcon={
+                  <Icon
+                    as={<Icons name="error" size={20} />}
+                    size={5}
+                    ml="2"
+                    color="red.500"
+                  />
+                }>
+                Email Formate is not Correct.
+              </FormControl.ErrorMessage>
+            </FormControl>
             <CustomInput
               placeholder="Password"
               h={10}
@@ -310,8 +345,11 @@ function Item(props: childProps) {
 
             <Button
               borderRadius={10}
-              paddingLeft={10}
-              paddingRight={10}
+              paddingLeft={70}
+              paddingRight={70}
+              _text={{
+                fontSize: 16,
+              }}
               onPress={() => {
                 props.loginButton();
                 props.setLoading(true);

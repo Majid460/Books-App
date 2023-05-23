@@ -7,5 +7,7 @@ type RootStackParamList = {
   [Routes.ADD_BOOK]: undefined;
   [Routes.ADD_AUTHOR]: undefined;
   [Routes.BOOK]: {url: String; title: String; detail: String; writer: String};
+  [Routes.SPLASH]: undefined;
+  [Routes.PROFILE]: undefined;
 };
 export default RootStackParamList;

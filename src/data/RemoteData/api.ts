@@ -4,6 +4,7 @@ import {
   LoginRequestModel,
   RegisterUserModel,
   booksAddModel,
+  tokenModel,
 } from '../ModelInterfaces/ModelInterfaces';
 
 export const registerUserApi = async (data: RegisterUserModel) => {
@@ -16,6 +17,7 @@ export const registerUserApi = async (data: RegisterUserModel) => {
       },
       body: JSON.stringify(data),
     });
+
     return response.json();
   } catch (e) {
     console.log(e);
@@ -92,6 +94,22 @@ export const GetAuthorsApi = async () => {
       },
     });
 
+    return response.json();
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const verifyTokenApi = async (token: tokenModel) => {
+  try {
+    const response = await fetch(baseUrls.LocalUrl + 'verifyToken/', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(token),
+    });
     return response.json();
   } catch (e) {
     console.log(e);

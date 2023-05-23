@@ -26,6 +26,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {registerUser, registerStatus} from '../redux/reducer';
 import {RootState} from '../redux/combineReducers';
+import ShowSlide from '../components/Slide/slide';
 const SignUpView = ({navigation}: NavProps) => {
   const [show, setShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -94,25 +95,7 @@ const SignUpView = ({navigation}: NavProps) => {
         justifyContent="center"
         backgroundColor="darkBlue.900"
         alignSelf="center">
-        <Slide
-          in={isOpenTop}
-          duration={1000}
-          placement="top"
-          marginLeft={3}
-          marginTop={5}
-          marginRight={3}>
-          <Box
-            p="40px"
-            _text={{
-              color: 'white',
-              fontSize: 18,
-            }}
-            mt="4"
-            bg="teal.500"
-            rounded="md">
-            {slideText}
-          </Box>
-        </Slide>
+        <ShowSlide isOpenTop={isOpenTop} slideText={slideText} />
         <Box
           maxW="90%"
           maxH="95%"

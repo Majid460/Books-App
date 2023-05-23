@@ -61,3 +61,10 @@ export interface RegisterResponseModel {
   statusCode: number;
   data: RegisterUserModel;
 }
+export interface verifyTokenModel {
+  success: boolean;
+  message: string;
+}
+export interface tokenModel {
+  token: string;
+}

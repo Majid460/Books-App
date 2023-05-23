@@ -5,4 +5,6 @@ export enum Routes {
   BOOK = 'Book',
   ADD_BOOK = 'Add Book',
   ADD_AUTHOR = 'Add Author',
+  SPLASH = 'Splash',
+  PROFILE = 'Profile',
 }

@@ -3,6 +3,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import RootStackParamList from './Routes/routes';
 import {Routes} from './Routes/routes_names';
 
+//Splash
+type SplashScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  Routes.SPLASH
+>;
+type SplashNavProps = {
+  navigation: SplashScreenNavigationProp;
+};
 //Login
 type ScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -50,6 +58,15 @@ type AuthorNavProps = {
   navigation: AuthorScreenNavigationProp;
   route: AuthorScreenRoute;
 };
+//Profile
+type ProfileScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  Routes.PROFILE
+>;
+type ProfileNavProps = {
+  navigation: ProfileScreenNavigationProp;
+};
+
 export type {
   ScreenNavigationProp,
   NavProps,
@@ -57,4 +74,5 @@ export type {
   NewBookNavProps,
   AuthorNavProps,
   HomeNavProps,
+  SplashNavProps,
 };

@@ -84,7 +84,6 @@ function AddBookView({navigation}: NewBookNavProps) {
     }
   };
   let deviceHeight = Dimensions.get('window').height;
-  console.log('Height::' + deviceHeight);
   return (
     <Box
       height="100%"

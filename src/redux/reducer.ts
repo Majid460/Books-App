@@ -14,6 +14,7 @@ interface InitialStates {
   registerStatus: string;
   loginSuccess: LoginSuccessModel;
   loginError: string;
+  tokenStatus: string;
 }
 
 export const initialState: InitialStates = {
@@ -26,6 +27,7 @@ export const initialState: InitialStates = {
   registerStatus: '',
   loginSuccess: initiateUserLogin,
   loginError: '',
+  tokenStatus: '',
 };
 export const movieReducer = createSlice({
   name: 'reducer',
@@ -68,6 +70,10 @@ export const movieReducer = createSlice({
     setLoginError: (state, action) => {
       state.loginError = action.payload;
     },
+    verifyToken: (state, action) => {},
+    setTokenStatus: (state, action) => {
+      state.tokenStatus = action.payload;
+    },
   },
 });
 
@@ -91,5 +97,8 @@ export const {
   loginUser,
   loginSuccessData,
   setLoginError,
+  //token Verify
+  verifyToken,
+  setTokenStatus,
 } = movieReducer.actions;
 export default movieReducer.reducer;

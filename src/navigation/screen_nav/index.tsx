@@ -8,12 +8,19 @@ import BookDetailView from '../../views/book_detail_view';
 import {Routes} from '../Routes/routes_names';
 import AddBookView from '../../views/add_book_view';
 import AddAuthor from '../../views/add_author_view';
+import SplashView from '../../views/splash_view';
+import ProfileView from '../../views/profile_view';
 
 const stack = createNativeStackNavigator<RootStackParamList>();
 
 const NavigationWrapper = () => {
   return (
-    <stack.Navigator initialRouteName={Routes.LOGIN}>
+    <stack.Navigator initialRouteName={Routes.SPLASH}>
+      <stack.Screen
+        name={Routes.SPLASH}
+        component={SplashView}
+        options={{headerShown: false}}
+      />
       <stack.Screen
         name={Routes.LOGIN}
         component={LoginView}
@@ -51,6 +58,15 @@ const NavigationWrapper = () => {
       <stack.Screen
         name={Routes.ADD_AUTHOR}
         component={AddAuthor}
+        options={{
+          headerTitleAlign: 'center',
+          headerShown: true,
+          headerBackButtonMenuEnabled: true,
+        }}
+      />
+      <stack.Screen
+        name={Routes.PROFILE}
+        component={ProfileView}
         options={{
           headerTitleAlign: 'center',
           headerShown: true,

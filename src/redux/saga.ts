@@ -7,10 +7,12 @@ import {
   addBooks,
   getBooksApi,
   registerUserApi,
+  verifyTokenApi,
 } from '../data/RemoteData/api';
 import {
   LoginSuccessModel,
   RegisterResponseModel,
+  verifyTokenModel,
 } from '../data/ModelInterfaces/ModelInterfaces';
 import {AnyAction} from '@reduxjs/toolkit';
 
@@ -92,6 +94,18 @@ function* getAuthors(): any {
     yield put(actions.getErrorAuthor('Error'));
   }
 }
+function* verifyToken(action: AnyAction): any {
+  try {
+    const response = yield call(verifyTokenApi, action.payload);
+    if (response) {
+      yield put(actions.setTokenStatus(response.message));
+    } else {
+      yield put(actions.setTokenStatus('Error'));
+    }
+  } catch (e) {
+    yield put(actions.setTokenStatus('Error'));
+  }
+}
 export default function* () {
   yield takeLatest(actions.loginUser, loginUser);
   yield takeLatest(actions.registerUser, RegisterUser);
@@ -99,4 +113,5 @@ export default function* () {
   yield takeLatest(actions.getBooksData, getBooks);
   yield takeLatest(actions.addAuthor, AddAuthor);
   yield takeLatest(actions.getAuthor, getAuthors);
+  yield takeLatest(actions.verifyToken, verifyToken);
 }
