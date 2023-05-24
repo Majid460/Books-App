@@ -5,7 +5,8 @@ This app includes:
 1. Type Script
 2. Native Base
 3. Navigation
-
+4. Realm for local Storage
+5. Redux and Saga
 
 ![Screenshot 2023-04-07 at 3 23 24 PM](https://user-images.githubusercontent.com/80375443/230592729-ca99f6d8-ab7f-4feb-8b8c-4b15f57d29f8.png)
 ![Screenshot 2023-04-07 at 3 23 55 PM](https://user-images.githubusercontent.com/80375443/230592788-0e427149-e79d-4f7e-9d3d-2982eecd96cc.png)
