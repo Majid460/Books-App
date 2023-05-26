@@ -9,6 +9,7 @@ import {
   StatusBar,
   IconButton,
   Pressable,
+  Menu,
 } from 'native-base';
 import React from 'react';
 import {useIsFocused} from '@react-navigation/native';
@@ -27,14 +28,21 @@ import {Routes} from '../navigation/Routes/routes_names';
 import {UserRealmContext} from '../data/LocalDataStorage';
 import UserModel from '../data/LocalDataStorage/Realm_Models/UserModel';
 import ShowSlide from '../components/Slide/slide';
+import {useStatusListener} from './profile_view';
+import DialogView from '../components/Dialog/dialog';
 function HomeView({navigation, route}: HomeNavProps) {
   let id = route.params.id;
-  let name = route.params.name;
-  let pic = route.params.pic;
-  let email = route.params.email;
   const {useObject} = UserRealmContext;
   const realm = useObject(UserModel, id);
-
+  let name = '';
+  let pic = '';
+  let email = '';
+  if (realm != null) {
+    name = realm.name;
+    pic = realm.pic;
+    email = realm.email;
+  }
+  const dialogRef = React.useRef(null);
   const isFocused = useIsFocused();
   const [loading, setLoading] = React.useState(false);
   const [book, setBooks] = React.useState<books[]>();
@@ -45,6 +53,8 @@ function HomeView({navigation, route}: HomeNavProps) {
   const [bookData, setBooksData] = React.useState<books[]>();
   const [isOpenTop, setIsOpenTop] = React.useState(false);
   const [slideText, setSlideText] = React.useState('');
+  const [updateStatus, setUpdateStatus] = React.useState(false);
+  const [openDialog, setDialogOpen] = React.useState(false);
   const dispatch = useDispatch();
   const authorsData = useSelector(
     (state: RootState) => state.reducer.authorData,
@@ -56,6 +66,16 @@ function HomeView({navigation, route}: HomeNavProps) {
     dispatch(getBooksData({}));
     dispatch(getAuthor({}));
   };
+  useStatusListener(({updatedStatus: status}) => {
+    setUpdateStatus(status);
+    if (updateStatus) {
+      if (realm != null) {
+        name = realm.name;
+        pic = realm.pic;
+        email = realm.email;
+      }
+    }
+  }, []);
   React.useEffect(() => {
     if (!filterData) {
       getData();
@@ -89,10 +109,31 @@ function HomeView({navigation, route}: HomeNavProps) {
       dispatch(getBooksData({}));
     }
   }, [isFocused, booksData, authorsData]);
+  const handleMenuItemClick = () => {
+    setDialogOpen(true);
+  };
+  const handleLogout = () => {
+    setDialogOpen(false);
+    navigation.navigate(Routes.LOGIN);
+  };
   return (
     <>
       <StatusBar backgroundColor="darkBlue.800" barStyle="light-content" />
       <Box safeAreaTop bg="darkBlue.800" />
+      <DialogView
+        isOpen={openDialog}
+        onClose={() => {
+          setDialogOpen(false);
+        }}
+        cancelRef={dialogRef}
+        cancelBtnText={'Close'}
+        okBtnText={'Logout'}
+        headerText={'Logout'}
+        bodyText={'Do you Really want to logout?'}
+        okPress={() => {
+          handleLogout();
+        }}
+      />
       <Box width="100%" backgroundColor="white" height={63}>
         <ShowSlide isOpenTop={isOpenTop} slideText={slideText} />
         <HStack
@@ -107,7 +148,12 @@ function HomeView({navigation, route}: HomeNavProps) {
           <Pressable
             maxW="96"
             onPress={() => {
-              navigation.navigate(Routes.PROFILE);
+              navigation.navigate(Routes.PROFILE, {
+                email: email,
+                name: name,
+                pic: pic,
+                id: id,
+              });
             }}>
             {({isHovered, isFocused, isPressed}) => {
               return (
@@ -141,7 +187,7 @@ function HomeView({navigation, route}: HomeNavProps) {
                     <Avatar
                       size="md"
                       source={{
-                        uri: pic,
+                        uri: pic == '' ? route.params.pic : pic,
                       }}></Avatar>
                   </ShimmerPlaceHolder>
                   <Box paddingLeft={1} paddingRight={7} width={40}>
@@ -170,18 +216,40 @@ function HomeView({navigation, route}: HomeNavProps) {
             }}
           </Pressable>
 
-          <HStack>
-            <IconButton
-              icon={<Icon as={Icons} name="favorite" size="md" color="white" />}
-            />
+          <HStack space={3} alignItems="center">
             <IconButton
               icon={<Icon as={Icons} name="search" size="md" color="white" />}
             />
-            <IconButton
-              icon={
-                <Icon as={Icons} name="more-vert" size="lg" color="white" />
-              }
-            />
+
+            <Menu
+              w="150"
+              trigger={triggerProps => {
+                return (
+                  <Pressable
+                    accessibilityLabel="More options menu"
+                    {...triggerProps}>
+                    <Icon
+                      paddingLeft={3}
+                      paddingRight={3}
+                      paddingX={6}
+                      marginRight={4}
+                      as={Icons}
+                      name="more-vert"
+                      size="lg"
+                      color="white"
+                    />
+                  </Pressable>
+                );
+              }}>
+              <Menu.Item
+                _text={{fontSize: 16, fontWeight: 600}}
+                onPress={() => {
+                  handleMenuItemClick();
+                }}>
+                Logout
+              </Menu.Item>
+              <Menu.Item>Nunito Sans</Menu.Item>
+            </Menu>
           </HStack>
         </HStack>
       </Box>

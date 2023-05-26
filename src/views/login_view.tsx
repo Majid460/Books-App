@@ -9,7 +9,6 @@ import {
   Icon,
   Pressable,
   Button,
-  Slide,
   FormControl,
 } from 'native-base';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -79,7 +78,6 @@ const LoginView = ({navigation}: NavProps) => {
     });
   };
   React.useEffect(() => {
-    console.log('In Realm Delete');
     myUserData.map(user => {
       realm.write(() => {
         realm.delete(user);

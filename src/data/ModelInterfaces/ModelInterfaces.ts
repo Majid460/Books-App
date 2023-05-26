@@ -68,3 +68,31 @@ export interface verifyTokenModel {
 export interface tokenModel {
   token: string;
 }
+export interface updateProfileModel {
+  name: string;
+  email: string;
+  id: string;
+  token: string;
+}
+
+export interface updatedProfileRes {
+  message: string;
+  data: LoginSubData;
+}
+const initialProfileData: LoginSubData = {
+  id: '',
+  email: '',
+  token: '',
+  name: '',
+  pic: '',
+};
+export const UpdateProfileResp: updatedProfileRes = {
+  message: '',
+  data: initialProfileData,
+};
+export interface updatePasswordData {
+  id: string;
+  token: string;
+  newPassword: string;
+  currentPassword: string;
+}

@@ -1,22 +1,43 @@
-import {
-  Avatar,
-  Box,
-  Center,
-  Divider,
-  HStack,
-  Icon,
-  Text,
-  VStack,
-} from 'native-base';
+import {Avatar, Box, Divider, HStack, Icon, Text, VStack} from 'native-base';
 import React from 'react';
-import {defaultAuthorPic} from '../../Constants';
 import Icons from 'react-native-vector-icons/MaterialIcons';
+import Space from '../Space/AddSpace';
+import {UserRealmContext} from '../../data/LocalDataStorage';
+import UserModel from '../../data/LocalDataStorage/Realm_Models/UserModel';
 interface profileInfoProps {
   name: string;
   email: string;
   pic: string;
+  updateStatus: boolean;
+  id: string;
 }
 function ProfileInfo(props: profileInfoProps) {
+  const [Name, setName] = React.useState('');
+  const [Email, setEmail] = React.useState('');
+  const {useObject} = UserRealmContext;
+  const realm = useObject(UserModel, props.id);
+  let name = '';
+  let pic = '';
+  let email = '';
+  React.useEffect(() => {
+    console.log(props.updateStatus);
+    if (realm != null) {
+      setName(realm.name);
+      pic = realm.pic;
+      setEmail(realm.email);
+    }
+    console.log(email);
+  }, []);
+  React.useEffect(() => {
+    if (props.updateStatus) {
+      if (realm != null) {
+        setName(realm.name);
+        pic = realm.pic;
+        setEmail(realm.email);
+      }
+      console.log(email);
+    }
+  }, [props.updateStatus]);
   return (
     <Box h="100%" w="100%" borderRadius={10} alignItems="center">
       <Box
@@ -35,7 +56,7 @@ function ProfileInfo(props: profileInfoProps) {
             alignSelf="center"
             size="lg"
             source={{
-              uri: defaultAuthorPic,
+              uri: props.pic,
             }}></Avatar>
           <Text
             w="78%"
@@ -46,7 +67,7 @@ function ProfileInfo(props: profileInfoProps) {
             fontSize={18}
             fontWeight="bold"
             overflow="hidden">
-            JHon De
+            {Name}
           </Text>
         </HStack>
       </Box>
@@ -60,11 +81,7 @@ function ProfileInfo(props: profileInfoProps) {
         borderTopLeftRadius={10}
         borderTopRightRadius={10}>
         <VStack space={2}>
-          <ProfileItem
-            title={'Email'}
-            value={'tugrp@example.com'}
-            icon={'email'}
-          />
+          <ProfileItem title={'Email'} value={Email} icon={'email'} />
           <Divider
             marginLeft={3}
             lineHeight={1}
@@ -72,7 +89,7 @@ function ProfileInfo(props: profileInfoProps) {
             height={10}
             backgroundColor="blue.500"
           />
-          <ProfileItem title={'Name'} value={'Jhon De'} icon={'person'} />
+          <ProfileItem title={'Name'} value={Name} icon={'person'} />
         </VStack>
       </Box>
     </Box>
@@ -84,6 +101,7 @@ interface ProfileItemProps {
   icon: string;
 }
 function ProfileItem(props: ProfileItemProps) {
+  console.log('email::' + props.value);
   return (
     <HStack width="100%" alignSelf="center" space={2} alignItems={'center'}>
       <Icon as={<Icons name={props.icon} />} size={7} color="blue.500" />
@@ -103,10 +121,13 @@ function ProfileItem(props: ProfileItemProps) {
         _light={{
           backgroundColor: 'gray.100',
         }}>
-        <Text fontSize={16} color="gray.700" fontWeight="bold">
+        <Text fontSize={18} color="gray.700" fontWeight="bold">
           {props.title}
         </Text>
-        <Text fontSize={14} fontWeight="bold" color="black">
+        <Space size={1} />
+        <Divider backgroundColor="gray.300" />
+        <Space size={1} />
+        <Text fontSize={16} color="black">
           {props.value}
         </Text>
       </Box>

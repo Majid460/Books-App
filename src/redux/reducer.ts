@@ -2,7 +2,9 @@ import {createSlice} from '@reduxjs/toolkit';
 import {
   AuthorDataResponse,
   LoginSuccessModel,
+  UpdateProfileResp,
   initiateUserLogin,
+  updatedProfileRes,
 } from '../data/ModelInterfaces/ModelInterfaces';
 interface InitialStates {
   authorData: AuthorDataResponse[];
@@ -15,6 +17,8 @@ interface InitialStates {
   loginSuccess: LoginSuccessModel;
   loginError: string;
   tokenStatus: string;
+  profileUpdateData: updatedProfileRes;
+  PasswordStatus: string;
 }
 
 export const initialState: InitialStates = {
@@ -28,6 +32,8 @@ export const initialState: InitialStates = {
   loginSuccess: initiateUserLogin,
   loginError: '',
   tokenStatus: '',
+  profileUpdateData: UpdateProfileResp,
+  PasswordStatus: '',
 };
 export const movieReducer = createSlice({
   name: 'reducer',
@@ -56,14 +62,6 @@ export const movieReducer = createSlice({
     registerStatus: (state, action) => {
       state.registerStatus = action.payload;
     },
-
-    registerUser: (state, action) => {},
-    getBooksData: (state, action) => {},
-    saveBooksData: (state, action) => {},
-    addAuthor: (state, action) => {},
-    getAuthor: (state, action) => {},
-
-    loginUser: (state, action) => {},
     loginSuccessData: (state, action) => {
       state.loginSuccess = action.payload;
     },
@@ -74,6 +72,21 @@ export const movieReducer = createSlice({
     setTokenStatus: (state, action) => {
       state.tokenStatus = action.payload;
     },
+    setProfileUpdateStatus: (state, action) => {
+      state.profileUpdateData = action.payload;
+    },
+    updatePasswordStatus: (state, action) => {
+      state.PasswordStatus = action.payload;
+    },
+
+    registerUser: (state, action) => {},
+    getBooksData: (state, action) => {},
+    saveBooksData: (state, action) => {},
+    addAuthor: (state, action) => {},
+    getAuthor: (state, action) => {},
+    loginUser: (state, action) => {},
+    updateProfile: (state, action) => {},
+    updatePassword: (state, action) => {},
   },
 });
 
@@ -100,5 +113,11 @@ export const {
   //token Verify
   verifyToken,
   setTokenStatus,
+  //UpdateProfile
+  updateProfile,
+  setProfileUpdateStatus,
+  //UpdatePassword
+  updatePassword,
+  updatePasswordStatus,
 } = movieReducer.actions;
 export default movieReducer.reducer;

@@ -4,6 +4,7 @@ import RailItem from './side_rail_view';
 
 interface RailItemsProps {
   sideRail: boolean;
+  onClick: (v: string) => void;
 }
 function RailView(props: RailItemsProps) {
   return (
@@ -29,19 +30,25 @@ function RailView(props: RailItemsProps) {
               <RailItem
                 title={'Account Information'}
                 iconName={'person'}
-                onClick={function (): void {}}
+                onClick={() => {
+                  props.onClick('AI');
+                }}
                 active={false}
               />
               <RailItem
                 title={'Manage Password'}
                 iconName={'lock'}
-                onClick={function (): void {}}
+                onClick={() => {
+                  props.onClick('MP');
+                }}
                 active={false}
               />
               <RailItem
                 title={'Update Profile'}
                 iconName={'edit'}
-                onClick={function (): void {}}
+                onClick={() => {
+                  props.onClick('UP');
+                }}
                 active={false}
               />
             </VStack>

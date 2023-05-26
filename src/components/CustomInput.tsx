@@ -30,6 +30,9 @@ function CustomInput(props: Props) {
       borderRadius={props.borderRadius}
       onContentSizeChange={props.onContentSizeChange}
       autoCapitalize={props.autoCapitalize}
+      editable={props.editable}
+      maxLength={props.maxLength}
+      defaultValue={props.defaultValue}
     />
   );
 }

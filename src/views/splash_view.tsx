@@ -26,6 +26,8 @@ function SplashView({navigation}: SplashNavProps) {
       if (userData[0].token != undefined) {
         dispatch(verifyToken({token: userData[0].token}));
       }
+    } else {
+      navigation.navigate(Routes.LOGIN);
     }
     animateImageBoxLeft();
   }, []);
@@ -52,7 +54,7 @@ function SplashView({navigation}: SplashNavProps) {
       } else if (tokenStatus == 'Token expired') {
         navigation.navigate(Routes.LOGIN);
       } else if (tokenStatus == 'Error') {
-        //Show Dialog
+        navigation.navigate(Routes.LOGIN);
       }
     }, 8000);
   }, [tokenStatus]);

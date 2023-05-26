@@ -1,4 +1,4 @@
-import {put, takeLatest, call} from 'redux-saga/effects';
+import {put, takeLatest, call, takeEvery} from 'redux-saga/effects';
 import * as actions from './reducer';
 import {
   AddAuthorApi,
@@ -7,6 +7,8 @@ import {
   addBooks,
   getBooksApi,
   registerUserApi,
+  updatePasswordApi,
+  updateProfileApi,
   verifyTokenApi,
 } from '../data/RemoteData/api';
 import {
@@ -106,6 +108,30 @@ function* verifyToken(action: AnyAction): any {
     yield put(actions.setTokenStatus('Error'));
   }
 }
+function* updateProfileSaga(action: AnyAction): any {
+  try {
+    const response = yield call(updateProfileApi, action.payload);
+    if (response.message == 'Data Updated') {
+      yield put(actions.setProfileUpdateStatus(response));
+    } else {
+      yield put(actions.setProfileUpdateStatus({}));
+    }
+  } catch (e) {
+    yield put(actions.setProfileUpdateStatus({}));
+  }
+}
+function* updatePass(action: AnyAction): any {
+  try {
+    const response = yield call(updatePasswordApi, action.payload);
+    if (response.message == 'Password Updated Successfully') {
+      yield put(actions.updatePasswordStatus(response.message));
+    } else {
+      yield put(actions.updatePasswordStatus(response.message));
+    }
+  } catch (e) {
+    yield put(actions.updatePasswordStatus('Error'));
+  }
+}
 export default function* () {
   yield takeLatest(actions.loginUser, loginUser);
   yield takeLatest(actions.registerUser, RegisterUser);
@@ -114,4 +140,6 @@ export default function* () {
   yield takeLatest(actions.addAuthor, AddAuthor);
   yield takeLatest(actions.getAuthor, getAuthors);
   yield takeLatest(actions.verifyToken, verifyToken);
+  yield takeLatest(actions.updateProfile, updateProfileSaga);
+  yield takeLatest(actions.updatePassword, updatePass);
 }

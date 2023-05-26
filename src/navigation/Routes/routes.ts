@@ -8,6 +8,11 @@ type RootStackParamList = {
   [Routes.ADD_AUTHOR]: undefined;
   [Routes.BOOK]: {url: String; title: String; detail: String; writer: String};
   [Routes.SPLASH]: undefined;
-  [Routes.PROFILE]: undefined;
+  [Routes.PROFILE]: {
+    email: string;
+    name: string;
+    pic: string;
+    id: string;
+  };
 };
 export default RootStackParamList;

@@ -59,12 +59,14 @@ type AuthorNavProps = {
   route: AuthorScreenRoute;
 };
 //Profile
-type ProfileScreenNavigationProp = StackNavigationProp<
+export type ProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   Routes.PROFILE
 >;
+type ProfileScreenRoute = RouteProp<RootStackParamList, Routes.PROFILE>;
 type ProfileNavProps = {
   navigation: ProfileScreenNavigationProp;
+  route: ProfileScreenRoute;
 };
 
 export type {
@@ -75,4 +77,5 @@ export type {
   AuthorNavProps,
   HomeNavProps,
   SplashNavProps,
+  ProfileNavProps,
 };

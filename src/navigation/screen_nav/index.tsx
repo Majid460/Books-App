@@ -10,6 +10,7 @@ import AddBookView from '../../views/add_book_view';
 import AddAuthor from '../../views/add_author_view';
 import SplashView from '../../views/splash_view';
 import ProfileView from '../../views/profile_view';
+import ManagePassword from '../../components/profileRail/manage_passwords';
 
 const stack = createNativeStackNavigator<RootStackParamList>();
 

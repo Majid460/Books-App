@@ -5,6 +5,8 @@ import {
   RegisterUserModel,
   booksAddModel,
   tokenModel,
+  updatePasswordData,
+  updateProfileModel,
 } from '../ModelInterfaces/ModelInterfaces';
 
 export const registerUserApi = async (data: RegisterUserModel) => {
@@ -70,6 +72,7 @@ export const getBooksApi = async () => {
 };
 //Add Author
 export const AddAuthorApi = async (data: AuthorAddModel) => {
+  console.log(data);
   try {
     const response = await fetch(baseUrls.LocalUrl + 'AddAuthor', {
       method: 'POST',
@@ -110,6 +113,50 @@ export const verifyTokenApi = async (token: tokenModel) => {
       },
       body: JSON.stringify(token),
     });
+    return response.json();
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const updateProfileApi = async (data: updateProfileModel) => {
+  try {
+    const dataUp = {name: data.name, email: data.email};
+    const response = await fetch(
+      baseUrls.LocalUrl + `updateProfile/${data.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: 'Bearer ' + data.token,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataUp),
+      },
+    );
+    const user = await response.json();
+    return user;
+  } catch (e) {
+    console.log('ER::' + e);
+  }
+};
+
+export const updatePasswordApi = async (data: updatePasswordData) => {
+  try {
+    const dataUp = {
+      currentPassword: data.currentPassword,
+      newPassword: data.newPassword,
+      id: data.id,
+    };
+    const response = await fetch(baseUrls.LocalUrl + 'updatePassword', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + data.token,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataUp),
+    });
+    console.log(response);
     return response.json();
   } catch (e) {
     console.log(e);
